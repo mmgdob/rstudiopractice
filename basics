@@ -1,0 +1,106 @@
+#textbook link: https://rafalab.dfci.harvard.edu/dsbook/
+#1 define variables and perform equations
+a <- 2
+b <- -1
+c <- -4
+solution1 <- (-b + sqrt(b^2 - 4*a*c) ) / (2*a)
+solution2 <- (-b - sqrt(b^2 - 4*a*c) ) / (2*a)
+#values table in Environment in RStudio will capture these numbers
+#to limit the significant digits returned, use options(digits = 3) 
+
+#2movielens dataset
+library(dslabs)
+data(movielens)
+#view(movielens) can be used to see the table in RStudio and the data table in Environment will show the variables/columns, 
+  #class of each variable, and obs/rows
+#str(movielens) shows the table overview in the Console, including the number of obs/rows and variables/columns
+#head(movielens) shows data for the first 6 rows
+#names(movielens) gives the list of variables
+#levels(movielens$genres) gives the list of unique values present in the variable genres, $ is the accessor operator
+#nlevels(movielens$genres) gives the number of unique values present in the variable genres
+#class(movielens$year) gives the class of the variable year, which is integer
+
+#3vectors
+x <- c(2, 43, 27, 96, 18)
+> sort(x)
+[1]  2 18 27 43 96
+> order(x)
+[1] 1 5 3 2 4
+> rank(x)
+[1] 1 4 3 5 2
+> min(x)
+[1] 2
+> which.min(x)
+[1] 1
+> max(x)
+[1] 96
+> which.max(x)
+[1] 4
+name <- c("Mandi", "Amy", "Nicole", "Olivia")
+distance <- c(0.8, 3.1, 2.8, 4.0)
+time <- c(10, 30, 40, 50)
+#For hours Olivia ran, define hours as hour <- time/60 then hour[4] since her time is the 4th in vector time
+#For Mandi's speed in mph, define speed <- distance/hour then speed[1] since Mandi's information is the 1st in the distance
+  #and hour vectors
+#For the person with the fastest speed, use name[which.max(speed)]
+
+#4 generating plots
+library(dslabs)
+data(olive)
+head(olive)
+#plot(olive$palmitic, olive$palmitoleic) will generate a scatterplot between these variables in Plots
+#hist(olive$eicosenoic) will generate a histogram that shows the Frequency on the y-axis for these 2 variables
+#boxplot(palmitic ~ region, data = olive) will generate a box plot between these 2 variables with each Factor in region 
+  #displayed separately
+
+#5 exploring and manipulating datasets
+library(dslabs)
+data(heights)
+options(digits = 3)
+#to calculate average overall height, use ind <- heights$height > mean(heights$height)
+#to calculate how many people are taller than the average height, use sum(ind)
+#to see how many people with sex = Female are taller than the average height, use sum(ind & heights$sex=="Female")
+#to see the proporation of people with sex = Female in the dataset, use mean(heights$sex == "Female")
+#min height is below, for max height use max(heights$height)
+min(heights$height)
+[1] 50
+#the obs/row that corresponds to the min height 
+> match(50,heights$height)
+[1] 1032
+#the sex of the person with the minimum height
+heights$sex[1032]
+[1] Male
+Levels: Female Male
+#the integar value between the min and max heights (max is 82.7)
+x <- 50:82
+#how many integars are not in the dataset?
+sum(!(x %in% heights$height))
+[1] 5
+#to create a new dataset, heights2, based on the dataset heights with a new variable/column for height in cm, ht_cm, use 
+  #heights2 <- mutate(heights, ht_cm = height*2.54)
+#I get an error in Rstudio: Error in mutate(heights, ht_cm = height * 2.54) : 
+  #could not find function "mutate"
+#as a workaround, I duplicated the heights dataset as heights2 
+heights2 <- heights
+#then I added the columns ht_cm to heights2 based on the values in heights$height but I could have also used heights2$height
+  #as they are the same data
+heights2$ht_cm <- heights$height * 2.54
+#to get the height of the 18th person in heights2 in cm, use heights2$ht_cm[18]
+#to get how many sex = Females in heights2 and the height mean, first use females <- filter(heights2, sex == "Female")
+#I get an error in RStudio: Error in filter(heights2, sex == "Female") : object 'sex' not found
+#as a workaround, I created a new dataset female from heights2 then used the subset function to keep only the Females
+females <- heights2
+females <- subset(females, sex == "Female")
+nrow(females)
+[1] 238
+> mean(females$ht_cm)
+[1] 165
+library(dslabs)
+data(murders)
+#how to find the index of the row that corresponds to Massachusetts 
+> which(murders$state == "Massachusetts")
+[1] 22
+> match(c("Massachusetts"), murders$state)
+[1] 22
+
+
